@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>STAR-X AI</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="header">
+            <div class="logo">⭐ STAR-X</div>
+            <div class="subtitle">Your personal AI assistant</div>
+        </div>
+
+        <div id="chat">
+
+            <div class="message ai">
+                <strong>STAR-X:</strong><br>
+                Hello! I'm STAR-X. How can I help you today?
+            </div>
+
+        </div>
+
+        <div class="input-area">
+
+            <input
+                type="text"
+                id="userInput"
+                placeholder="Ask STAR-X anything..."
+            >
+
+            <button onclick="sendMessage()">Send</button>
+
+        </div>
+
+    </div>
+
+    <script>
+
+        function sendMessage() {
+
+            const input = document.getElementById("userInput");
+            const chat = document.getElementById("chat");
+
+            const message = input.value.trim();
+
+            if (message === "") {
+                return;
+            }
+
+            chat.innerHTML += `
+                <div class="message user">
+                    <strong>You:</strong><br>
+                    ${message}
+                </div>
+            `;
+
+            chat.innerHTML += `
+                <div class="message ai">
+                    <strong>STAR-X:</strong><br>
+                    I'm still learning. My AI brain will be connected soon! 🚀
+                </div>
+            `;
+
+            input.value = "";
+
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+    </script>
+
+</body>
+</html>
