@@ -1,0 +1,58 @@
+export default async function handler(req, res) {
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed" });
+  }
+
+  try {
+    const { message } = req.body;
+
+    if (!message || typeof message !== "string") {
+      return res.status(400).json({ error: "Message is required" });
+    }
+
+    if (message.length > 2000) {
+      return res.status(400).json({ error: "Message is too long" });
+    }
+
+    const response = await fetch("https://api.openai.com/v1/responses", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`
+      },
+      body: JSON.stringify({
+        model: "gpt-5.6",
+        input: [
+          {
+            role: "system",
+            content: "You are STAR-X, a helpful, intelligent and friendly AI assistant."
+          },
+          {
+            role: "user",
+            content: message
+          }
+        ]
+      })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      console.error(data);
+      return res.status(500).json({
+        error: "STAR-X could not connect to its AI brain."
+      });
+    }
+
+    return res.status(200).json({
+      reply: data.output_text
+    });
+
+  } catch (error) {
+    console.error(error);
+
+    return res.status(500).json({
+      error: "Something went wrong."
+    });
+  }
+}
