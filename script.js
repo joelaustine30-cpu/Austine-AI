@@ -15,13 +15,32 @@ function sendMessage() {
         </div>
     `;
 
+try {
+    const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            message: message
+        })
+    });
+
+    const data = await response.json();
+
     chat.innerHTML += `
         <div class="message ai">
             <strong>STAR-X:</strong><br>
-            I'm still learning. My AI brain will be connected soon! 🚀
+            ${data.reply || data.error}
         </div>
     `;
 
-    input.value = "";
-    chat.scrollTop = chat.scrollHeight;
+} catch (error) {
+    chat.innerHTML += `
+        <div class="message ai">
+            <strong>STAR-X:</strong><br>
+            Sorry, I couldn't connect to my AI brain.
+        </div>
+    `;
+}
 }
